@@ -1,0 +1,23 @@
+{
+  "name": "guestbook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i ./src/input.css -o ./public/output.css",
+    "serve": "concurrently 'npx @tailwindcss/cli -i ./src/input.css -o ./public/output.css --watch' 'node srv.js'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.2.4",
+    "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "daisyui": "^5.5.19",
+    "php-server": "^3.0.0"
+  }
+}
