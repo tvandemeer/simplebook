@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 04, 2026 at 11:52 AM
+-- Generation Time: May 06, 2026 at 06:35 PM
 -- Server version: 12.2.2-MariaDB
 -- PHP Version: 8.5.5
 
@@ -31,7 +31,8 @@ CREATE TABLE `entries` (
   `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL,
   `message` text NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `fk_user` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -55,7 +56,8 @@ CREATE TABLE `userdata` (
 -- Indexes for table `entries`
 --
 ALTER TABLE `entries`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user` (`fk_user`);
 
 --
 -- Indexes for table `userdata`
@@ -72,13 +74,23 @@ ALTER TABLE `userdata`
 -- AUTO_INCREMENT for table `entries`
 --
 ALTER TABLE `entries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `userdata`
 --
 ALTER TABLE `userdata`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `entries`
+--
+ALTER TABLE `entries`
+  ADD CONSTRAINT `fk_user` FOREIGN KEY (`fk_user`) REFERENCES `userdata` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,7 +1,12 @@
 <?php
 if(!isset($_SESSION)){
     session_start();
+} 
+
+if(!array_key_exists('email', $_SESSION)) {
+  header('Location: login.php');
 }
+
 include('config.php');
 include('variableAndFunctions.php');
 ?>
@@ -12,16 +17,23 @@ include('variableAndFunctions.php');
   <title><?= $title ?></title>
   <link rel="icon" type="image/x-icon" href="favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href=
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
   <link href="output.css" rel="stylesheet">
 </head>
 <body>
-	<div class="navbar bg-amber-950 shadow-sm">
+	<div class="navbar shadow-sm">
     <div class="navbar-start">
-      <a class="btn btn-ghost text-xl">╚(•⌂•)╝</a>
+      <a class="btn btn-active text-xl">╚(•⌂•)╝</a>
     </div>
     <div class="navbar-end">
       <a class="btn btn-ghost text-xl" href="register.php">Register</a>
       <a class="btn btn-ghost text-xl" href="login.php">Login</a>
+      <?php
+      if(array_key_exists('email', $_SESSION)) {
+        echo '<a class="btn btn-warning text-xl" href="logout.php">Logout</a>';
+      }
+      ?>
     </div>
 	</div>
 
@@ -69,6 +81,6 @@ include('variableAndFunctions.php');
 		?>
     
   </div>
-            
+
 </body>
 </html>

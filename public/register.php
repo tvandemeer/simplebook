@@ -17,10 +17,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email already exists
     $checkEmailStmt = $dbconnect->prepare("SELECT email FROM userdata WHERE email=:email");
     $checkEmailStmt->execute(['email' => $email]);
+    $checkUsernameStmt = $dbconnect->prepare("SELECT username FROM userdata WHERE username=:username");
+    $checkUsernameStmt->execute(['username' => $username]);
 
     if ($checkEmailStmt->rowCount() > 0) {
         $message = "Email ID already exists";
-        $toastClass = "info";
+        $toastClass = "warning";
+    } elseif ($checkUsernameStmt->rowCount() > 0) {
+        $message = "Username ID already exists";
+        $toastClass = "warning";
     } else {
         // Prepare and bind
         $data = array($username, $email, $hashedPassword);
@@ -48,17 +53,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href=
 "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 		<link href="output.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
     <title>Registration</title>
 </head>
 
 <body>
-	<div class="navbar bg-amber-950 shadow-sm">
+	<div class="navbar shadow-sm">
     <div class="navbar-start">
       <a class="btn btn-ghost text-xl" href="index.php">╚(•⌂•)╝</a>
     </div>
     <div class="navbar-end">
-      <a class="btn btn-ghost text-xl">Register</a>
+      <a class="btn btn-active text-xl">Register</a>
       <a class="btn btn-ghost text-xl" href="login.php">Login</a>
+      <?php
+      if(array_key_exists('email', $_SESSION)) {
+        echo '<a class="btn btn-warning text-xl" href="logout.php">Logout</a>';
+      }
+      ?>
     </div>
 	</div>
 	
@@ -78,26 +89,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="post">
             <div class="text-center">
                 <i class="fa fa-user-circle-o fa-3x mt-1 mb-2"></i>
-                <h5 class="p-4" style="font-weight: 700;">Create Your Account</h5>
+                <h5 class="p-4">Create Your Account</h5>
             </div>
-            <div class="mb-2">
-                <label for="username"><i 
-                  class="fa fa-user"></i> User Name</label>
-                <input type="text" name="username" id="username"
-                  class="input w-full" required>
-            </div>
-            <div class="mb-2 mt-2">
-                <label for="email"><i 
-                  class="fa fa-envelope"></i> Email</label>
-                <input type="text" name="email" id="email"
-                  class="input w-full" required>
-            </div>
-            <div class="mb-2 mt-2">
-                <label for="password"><i 
-                  class="fa fa-lock"></i> Password</label>
-                <input type="password" name="password" id="password"
-                  class="input w-full" required>
-            </div>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend"><i class="fa fa-user"></i> User Name</legend>
+                <input type="text" name="username" id="username" class="input w-full" required>
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend"><i class="fa fa-envelope"></i> Email</legend>
+                <input type="text" name="email" id="email" class="input w-full" required>
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend"><i class="fa fa-lock"></i> Password</legend>
+                <input type="password" name="password" id="password" class="input w-full" required>
+            </fieldset>
             <div class="mb-2 mt-3">
                 <button type="submit" 
                   class="btn btn-primary">Create
@@ -109,6 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
+
     <script>
         let toastElList = [].slice.call(document.querySelectorAll('.toast'))
         let toastList = toastElList.map(function (toastEl) {
